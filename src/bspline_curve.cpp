@@ -14,7 +14,7 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 /**
- * @file BSplineCurve.cpp
+ * @file bspline_curve.cpp
  * @author Jorn Baayen
  * @version 1.0
  * @date 2015
@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include <ios>
 
-#include <fitpackpp/BSplineCurve.h>
+#include <fitpackpp/bspline_curve.h>
 
 #include "FCMangle.h"
 

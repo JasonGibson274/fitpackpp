@@ -14,7 +14,7 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 /**
- * @file BSplineSurface.cpp
+ * @file bspline_surface.cpp
  * @author Jorn Baayen
  * @version 1.0
  * @date 2015
@@ -30,7 +30,7 @@
 #include <stdexcept>
 #include <ios>
 
-#include <fitpackpp/BSplineSurface.h>
+#include <fitpackpp/bspline_surface.h>
 
 #include "FCMangle.h"
 

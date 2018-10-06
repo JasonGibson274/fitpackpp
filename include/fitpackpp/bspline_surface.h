@@ -14,7 +14,7 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 /**
- * @file BSplineSurface.h
+ * @file bspline_surface.h
  * @author Jorn Baayen
  * @version 1.0
  * @date 2015
