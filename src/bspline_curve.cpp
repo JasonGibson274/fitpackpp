@@ -50,7 +50,7 @@ extern "C" {
  * The actual degree is chosen such as to be one less than the number of data points, but no higher than preferredDegree.
  * @param smoothing Smoothing factor.  Must be non-negative. Set to 0.0, i.e., no smoothing, by default.
  */
-BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, int preferredDegree, double smoothing)
+BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, std::vector<double>& new_knots, int preferredDegree, double smoothing)
 {
 	// Number of data points
 	int m = (int) x.size();
@@ -64,8 +64,10 @@ BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, int p
 	}
 
 	// Configure curfit() parameters
-	int iopt = 0;                       // Compute a smoothing spline
-	int nest = m + k + 1;               // Over-estimate the number of knots
+	int iopt = -1;                       // Compute a smoothing spline
+	//int nest = m + k + 1;               // Over-estimate the number of knots
+  int num_knots = new_knots.size();
+  int nest = num_knots + 2*k + 2;
 
 	// Allocate weighting vector
 	double *w = new double[m];
@@ -73,7 +75,9 @@ BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, int p
 
 	// Allocate memory for knots and coefficients
 	t = new double[nest];               // Knots
-	std::fill(t, t + nest, 0.0);
+  for(unsigned int i = 0; i < new_knots.size(); i++) {
+    t[i + k + 1] = new_knots[i];
+  }
 
 	c = new double[nest];               // Coefficients
 	std::fill(c, c + nest, 0.0);
@@ -89,6 +93,10 @@ BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, int p
 	std::fill(iwrk, iwrk + nest, 0);
 
 	int ier = 0;
+  n = nest;
+  //printf("%d >= %d\n", nest, 2*k+2);
+  //printf("%d <= %d <= %d\n", 2*k+2, n, std::min(nest, m+k+1));
+  //printf("%f <= %f <= %f <= %f\n", x[0], t[0], t[new_knots.size()-1+k+1], x[m-1]);
 	curfit(&iopt, &m, (double*) &x[0], (double*) &y[0], w, &x[0], &x[m - 1], &k, &smoothing, &nest, &n, t, c, &fp, wrk, &lwrk, iwrk, &ier);
 	if (ier > 0) {
 		if (ier >= 10) {

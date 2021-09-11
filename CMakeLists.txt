@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.8)
 
 # FITPACK FORTRAN code
 enable_language(Fortran)
@@ -31,7 +31,7 @@ FortranCInterface_VERIFY(CXX)
 # For FCMangle.h
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(include)
 
 file(GLOB fitpackpp_SRC src/*.cpp)
 
