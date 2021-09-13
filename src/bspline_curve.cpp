@@ -66,8 +66,7 @@ BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, std::
 	// Configure curfit() parameters
 	int iopt = -1;                       // Compute a smoothing spline
 	//int nest = m + k + 1;               // Over-estimate the number of knots
-  int num_knots = new_knots.size();
-  int nest = num_knots + 2*k + 2;
+  int nest = new_knots.size() + 2*k + 2;
 
 	// Allocate weighting vector
 	double *w = new double[m];
@@ -94,12 +93,24 @@ BSplineCurve::BSplineCurve(std::vector<double> &x, std::vector<double> &y, std::
 
 	int ier = 0;
   n = nest;
-  //printf("%d >= %d\n", nest, 2*k+2);
-  //printf("%d <= %d <= %d\n", 2*k+2, n, std::min(nest, m+k+1));
-  //printf("%f <= %f <= %f <= %f\n", x[0], t[0], t[new_knots.size()-1+k+1], x[m-1]);
 	curfit(&iopt, &m, (double*) &x[0], (double*) &y[0], w, &x[0], &x[m - 1], &k, &smoothing, &nest, &n, t, c, &fp, wrk, &lwrk, iwrk, &ier);
 	if (ier > 0) {
 		if (ier >= 10) {
+      printf("%d >= %d\n", nest, 2*k+2);
+      printf("%d > %d\n", m, k);
+      printf("%d <= %d <= %d\n", 2*k+2, n, std::min(nest, m+k+1));
+      //printf("%f", x[0]);
+      //for(int i = 1; i < m; i++) {
+      //  printf(" <= %f", x[i]);
+      //}
+      printf("%f <= %f <= %f <= %f\n", x[0], x[1], x[m-2], x[m-1]);
+      printf("%f <= %f <= %f <= %f\n", x[0], t[0], t[new_knots.size()-1-k], x[m-1]);
+      printf("%d >= %d\n", lwrk, (k+1)*m+nest*(7+3*k));
+      // fpchec errors
+      std::cout << "========" <<std::endl;
+      printf("%d <= %d <= %d\n", k+1, n-k-1, m);
+      printf("%f <= %f <= %f <= %f\n", t[k+1], x[0], x[m-1], t[n-k]);
+      std::cout << std::endl;
 			std::stringstream s;
 			s << "Error fitting B-Spline curve using curfit(): " << ier;
 			throw std::runtime_error(s.str());
